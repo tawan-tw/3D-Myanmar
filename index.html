@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <div id="signupForm">
+            <h2>Signup</h2>
+            <input type="text" id="signupUsername" placeholder="Enter Username">
+            <input type="password" id="signupPassword" placeholder="Enter Password">
+            <button onclick="signup()">Signup</button>
+            <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+        </div>
+
+        <div id="loginForm" style="display: none;">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Enter Username">
+            <input type="password" id="loginPassword" placeholder="Enter Password">
+            <button onclick="login()">Login</button>
+            <p>Don't have an account? <a href="#" onclick="showSignup()">Signup</a></p>
+        </div>
+    </div>
+
+    <script>
+        function signup() {
+    let username = document.getElementById("signupUsername").value;
+    let password = document.getElementById("signupPassword").value;
+
+    if (username === "" || password === "") {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    let existingUser = users.find(user => user.username === username);
+    if (existingUser) {
+        alert("Username already exists. Choose another one.");
+        return;
+    }
+
+    users.push({ username, password });
+    localStorage.setItem("users", JSON.stringify(users));
+    
+    alert("Signup successful! Please log in.");
+    showLogin();
+}
+
+function login() {
+    let username = document.getElementById("loginUsername").value;
+    let password = document.getElementById("loginPassword").value;
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    let validUser = users.find(user => user.username === username && user.password === password);
+    
+    if (validUser) {
+        alert("Login successful!");
+        window.location.href = "dashboard.html";  // Redirect to a new page
+    } else {
+        alert("Invalid username or password.");
+    }
+}
+
+function showLogin() {
+    document.getElementById("signupForm").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+}
+
+function showSignup() {
+    document.getElementById("signupForm").style.display = "block";
+    document.getElementById("loginForm").style.display = "none";
+}
+
+    </script>
+</body>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #218838;
+}
+
+p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+</style>
+</html>
